@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juego de las Cartas - Tuki Burger</title>
+  <style>
+    body { text-align: center; font-family: sans-serif; background: #fdf3e7; }
+    h1 { color: #d35400; }
+    .cartas { display: flex; justify-content: center; margin-top: 30px; }
+    .carta {
+      width: 100px; height: 150px;
+      margin: 10px; border-radius: 8px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Card_back_06.svg/200px-Card_back_06.svg.png') center/cover;
+      cursor: pointer;
+      transition: transform 0.4s;
+    }
+    .carta.volteada { background: white; color: black; display: flex; align-items: center; justify-content: center; font-size: 2em; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 1em; }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Adiviná tu carta - Tuki Burger 🎯</h1>
+  <p>Elegí una carta y luego tratá de adivinarla tras mezclarse.</p>
+
+  <div class="cartas" id="cartas"></div>
+
+  <p id="mensaje"></p>
+  <button id="reiniciar" style="display:none;">Jugar de nuevo</button>
+
+  <script>
+    const valores = ['♥', '♠', '♦'];
+    let cartaElegida = null;
+    let estado = 'elegir'; // 'elegir' o 'adivinar'
+    const contenedor = document.getElementById('cartas');
+    const mensaje = document.getElementById('mensaje');
+    const btn = document.getElementById('reiniciar');
+
+    function mostrarCartas() {
+      contenedor.innerHTML = '';
+      valores.forEach((v, i) => {
+        const div = document.createElement('div');
+        div.classList.add('carta');
+        div.dataset.valor = v;
+        div.onclick = () => {
+          if (estado === 'elegir') {
+            cartaElegida = v;
+            mensaje.textContent = 'Se mezclaron las cartas... ¿Dónde está tu carta?';
+            mezclar();
+            estado = 'adivinar';
+          } else if (estado === 'adivinar') {
+            if (v === cartaElegida) {
+              mensaje.textContent = '🎉 ¡Ganaste una Coca o 20% off!';
+            } else {
+              mensaje.textContent = '😅 No era esa, probá otra vez.';
+            }
+            btn.style.display = 'inline';
+          }
+        };
+        contenedor.appendChild(div);
+      });
+    }
+
+    function mezclar() {
+      valores.sort(() => Math.random() - 0.5);
+      mostrarCartas();
+    }
+
+    btn.onclick = () => {
+      estado = 'elegir';
+      cartaElegida = null;
+      mensaje.textContent = '';
+      btn.style.display = 'none';
+      mostrarCartas();
+    };
+
+    mostrarCartas();
+  </script>
+</body>
+</html>
