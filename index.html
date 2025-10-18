@@ -1,150 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adiviná tu Hamburguesa - Tuki Burger</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
-      color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-      background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre-v2.png');
-    }
-
-    h1 {
-      color: #e67e22;
-      margin-top: 30px;
-    }
-
-    p {
-      color: #f2f2f2;
-    }
-
-    .cartas {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .carta {
-      width: 120px;
-      height: 120px;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      border: 3px solid transparent;
-      transition: all 0.3s ease;
-    }
-
-    .carta img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
-    }
-
-    .carta:hover img {
-      transform: scale(1.05);
-    }
-
-    .carta:hover {
-      border-color: #e67e22;
-      box-shadow: 0 0 15px rgba(230, 126, 34, 0.6);
-    }
-
-    button {
-      margin-top: 30px;
-      padding: 12px 24px;
-      font-size: 1em;
-      background-color: #e67e22;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #ff9933;
-    }
-
-    #mensaje {
-      font-size: 1.2em;
-      margin-top: 20px;
-      color: #f4b183;
-    }
-  </style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Tuki Burger - Adivina la Carta</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
 <body>
-  <h1>🍔 Adiviná tu Hamburguesa - Tuki Burger 🎯</h1>
-  <p>Elegí una hamburguesa, se mezcla... y tratá de adivinar cuál era la tuya.</p>
+    <div class="background-pattern"></div> <div class="game-container">
+        <h1>¡ADIVINA LA CARTA!</h1>
+        <p class="opportunities">OPORTUNIDADES: <span id="opportunities-count">2</span></p>
 
-  <div class="cartas" id="cartas"></div>
+        <div class="cards-container">
+            <div class="card" data-prize="false">
+                <div class="card-inner">
+                    <div class="card-face card-back">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    </div>
+                    <div class="card-face card-front">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                        </div>
+                </div>
+            </div>
+            <div class="card" data-prize="true">
+                <div class="card-inner">
+                    <div class="card-face card-back">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    </div>
+                    <div class="card-face card-front">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-prize="false">
+                <div class="card-inner">
+                    <div class="card-face card-back">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    </div>
+                    <div class="card-face card-front">
+                        <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <p id="mensaje"></p>
-  <button id="reiniciar" style="display:none;">Jugar de nuevo</button>
+        <p class="instruction">ELIGE UNA CARTA PARA GANAR:</p>
 
-  <script>
-    const hamburguesas = [
-      { nombre: 'Clásica', img: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg' },
-      { nombre: 'Doble', img: 'https://cdn.pixabay.com/photo/2017/12/09/08/18/burger-3001046_1280.jpg' },
-      { nombre: 'BBQ', img: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238247_1280.jpg' }
-    ];
+        <button id="reset-button">REINICIAR JUEGO</button>
 
-    let cartaElegida = null;
-    let estado = 'elegir';
-    const contenedor = document.getElementById('cartas');
-    const mensaje = document.getElementById('mensaje');
-    const btn = document.getElementById('reiniciar');
+        <div class="prize-info">
+            <h2>PREMIO:</h2>
+            <div class="prize-options">
+                <div class="prize-item">
+                    <img src="coca-cola.png" alt="Coca Cola">
+                    <span>COCA COLA</span>
+                </div>
+                <div class="prize-item">
+                    <img src="tuki-burger-logo.png" alt="Logo Tuki Burger">
+                    <span>-20% DESC. EN CUALQUIER BURGER</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function mostrarCartas() {
-      contenedor.innerHTML = '';
-      hamburguesas.forEach((h) => {
-        const div = document.createElement('div');
-        div.classList.add('carta');
-        const img = document.createElement('img');
-        img.src = h.img;
-        div.appendChild(img);
-        div.onclick = () => {
-          if (estado === 'elegir') {
-            cartaElegida = h.nombre;
-            mensaje.textContent = '🔄 Mezclando hamburguesas... ¡Adiviná la tuya!';
-            mezclar();
-            estado = 'adivinar';
-          } else if (estado === 'adivinar') {
-            if (h.nombre === cartaElegida) {
-              mensaje.textContent = '🎉 ¡Ganaste una Coca o 20% off en tu combo!';
-            } else {
-              mensaje.textContent = '😅 No era esa, ¡probá otra vez!';
-            }
-            btn.style.display = 'inline';
-          }
-        };
-        contenedor.appendChild(div);
-      });
-    }
-
-    function mezclar() {
-      hamburguesas.sort(() => Math.random() - 0.5);
-      mostrarCartas();
-    }
-
-    btn.onclick = () => {
-      estado = 'elegir';
-      cartaElegida = null;
-      mensaje.textContent = '';
-      btn.style.display = 'none';
-      mostrarCartas();
-    };
-
-    mostrarCartas();
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
